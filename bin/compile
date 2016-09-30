@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+set -e
+
+function indent() {
+  c='s/^/       /'
+  case $(uname) in
+    Darwin) sed -l "$c";;
+    *)      sed -u "$c";;
+  esac
+}
+ORIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "ORIG_DIR=$ORIG_DIR"
+unset GIT_DIR
+
+for BUILDPACK in $(cat $1/.sidecar_buildpacks); do
+  dir=$(mktemp -t buildpackXXXXX)
+  rm -rf $dir
+
+  url=${BUILDPACK%#*}
+  branch=${BUILDPACK#*#}
+
+  if [ "$branch" == "$url" ]; then
+    branch=""
+  fi
+
+  if [ "$url" != "" ]; then
+    echo "=====> Downloading Buildpack: $url"
+
+    if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
+      mkdir -p "$dir"
+      if [[ "$url" =~ ^file\:\/\/ ]]; then
+        tar xvz -C "$dir" ${url:7} > /dev/null 2>&1
+      else
+        curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
+      fi
+    else
+      git clone $url $dir >/dev/null 2>&1
+      the_dir=`expr "$url" : '.*/\(.*\)\.git$'`
+    fi
+    cd $dir
+    git submodule update --init
+    if [ "$branch" != "" ]; then
+      git checkout $branch >/dev/null 2>&1
+    fi
+
+    # we'll get errors later if these are needed and don't exist
+    chmod -f +x $dir/bin/{detect,compile,release} || true
+
+    framework=$($dir/bin/detect $1)
+
+    if [ $? == 0 ]; then
+      echo "=====> Detected Framework: $framework"
+      echo "about to run $dir/bin/compile $1 $2 $3"
+      cd $HOME
+      echo "calling $dir/bin/compile from $PWD"
+      CF_STACK='cflinuxfs2' $dir/bin/compile $1 $2 $3
+      echo "done"
+
+      if [ $? != 0 ]; then
+	    echo "response code was $?"
+        exit 1
+      fi
+      echo "after ruby compile"
+      # check if the buildpack left behind an environment for subsequent ones
+      if [ -e $dir/export ]; then
+        source $dir/export
+      fi
+
+      if [ -x $dir/bin/release ]; then
+        $dir/bin/release $1 > $1/last_pack_release.out
+      fi
+      echo "ran $dir/bin/release into $1"
+    else
+      echo "Couldn't detect any framework for this buildpack. Exiting."
+      exit 1
+    fi
+  fi
+done
+echo "after for loop"
+$ORIG_DIR/sidecar_compile $1 $2 $3
+$ORIG_DIR/sidecar_release $1 > $1/sidecar_release.out
+$ORIG_DIR/sidecar_post_compile $1 $2 $3
+
+if [ -e $1/last_pack_release.out ]; then
+  echo "Using release configuration from last framework ($framework)."
+fi

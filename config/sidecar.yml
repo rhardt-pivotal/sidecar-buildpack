@@ -15,5 +15,5 @@
 
 # Configuration for the Java Main container
 ---
-java_main_class:
+runnable_jar: sidecar.jar
 arguments:

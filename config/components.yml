@@ -18,7 +18,7 @@
 containers:
   #- "JavaBuildpack::Container::DistZip"
   #- "JavaBuildpack::Container::Groovy"
-  - "JavaBuildpack::Container::JavaMain"
+  #- "JavaBuildpack::Container::JavaMain"
   - "JavaBuildpack::Container::Sidecar"
   #- "JavaBuildpack::Container::PlayFramework"
   #- "JavaBuildpack::Container::Ratpack"

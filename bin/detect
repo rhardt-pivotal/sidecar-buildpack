@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-
-if [ -f $1/.buildpacks ]; then
-  echo "Multipack"
+echo "SCBP DETECT"
+if [ -f $1/.sidecar_buildpacks ]; then
+  echo "Sidecar-Buildpack"
   exit 0
 else
-  echo "no .buildpacks file"
+  echo "no .sidecar_buildpacks file"
   exit 1
 fi

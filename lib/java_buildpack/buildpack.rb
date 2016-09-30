@@ -51,6 +51,16 @@ module JavaBuildpack
       tags
     end
 
+
+    def post_compile
+      puts "POST-COMPILE"
+
+      container = component_detection('container', @containers, true).first
+
+      container.post_compile unless not container.respond_to?("post_compile")
+
+    end
+
     # Transforms the application directory such that the JRE, container, and frameworks can run the application
     #
     # @return [Void]

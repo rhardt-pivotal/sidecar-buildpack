@@ -110,6 +110,19 @@ module JavaBuildpack
         end
       end
 
+      def copy_resource(file_name = nil, target_directory = @sandbox)
+        resources = RESOURCES_DIRECTORY + @component_id
+
+        if resources.exist?
+          FileUtils.mkdir_p target_directory
+          FileUtils.cp(File.join(resources, file_name), target_directory)
+          @logger.debug { "Resource #{resource}/#{file_name} found" }
+        else
+          @logger.debug { "No resource #{resource}/#{file_name} found" }
+        end
+      end
+
+
       private
 
       RESOURCES_DIRECTORY = Pathname.new(File.expand_path('../../../../resources', __FILE__)).freeze

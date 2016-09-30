@@ -20,6 +20,7 @@ require 'java_buildpack/util/dash_case'
 require 'java_buildpack/util/java_main_utils'
 require 'java_buildpack/util/qualify_path'
 require 'java_buildpack/util/spring_boot_utils'
+require 'yaml'
 
 module JavaBuildpack
   module Container
@@ -27,7 +28,7 @@ module JavaBuildpack
     # Encapsulates the detect, compile, and release functionality for applications running a simple Java +main()+
     # method. This isn't a _container_ in the traditional sense, but contains the functionality to manage the lifecycle
     # of Java +main()+ applications.
-    class JavaMain < JavaBuildpack::Component::BaseComponent
+    class Sidecar < JavaBuildpack::Component::BaseComponent
       include JavaBuildpack::Util
 
       # Creates an instance
@@ -40,13 +41,35 @@ module JavaBuildpack
 
       # (see JavaBuildpack::Component::BaseComponent#detect)
       def detect
-        main_class ? JavaMain.to_s.dash_case : nil
+        "Sidecar-buildpack"
       end
 
       # (see JavaBuildpack::Component::BaseComponent#compile)
       def compile
-        return unless @spring_boot_utils.is?(@application)
-        @droplet.additional_libraries.link_to(@spring_boot_utils.lib(@droplet))
+        @droplet.copy_resources
+        #return unless @spring_boot_utils.is?(@application)
+        #@droplet.additional_libraries.link_to(@spring_boot_utils.lib(@droplet))
+      end
+
+      SIDECAR_RELEASE = "sidecar_release.out"
+      LAST_PACK_RELEASE = "last_pack_release.out"
+
+      def post_compile
+
+        app_dir = @application.root
+
+        sidecar_command = "#!/usr/bin/env bash\n\n"+YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))['default_process_types']['web']
+        pack_command = "#!/usr/bin/env bash\n\n"+YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))['default_process_types']['web']
+
+        File.open(File.join(app_dir, "run_sidecar.sh"), 'w') { |file| file.write(sidecar_command)}
+        File.open(File.join(app_dir, "run_pack.sh"), 'w') { |file| file.write(pack_command)}
+        File.chmod(0755, File.join(app_dir, "run_sidecar.sh"))
+        File.chmod(0755, File.join(app_dir, "run_pack.sh"))
+
+        @droplet.copy_resource(file_name="run_all.sh", target_directory=app_dir)
+        File.chmod(0755, File.join(app_dir, "run_all.sh"))
+
+
       end
 
       # (see JavaBuildpack::Component::BaseComponent#release)
@@ -59,8 +82,8 @@ module JavaBuildpack
           @droplet.additional_libraries.insert 0, @application.root
         end
 
-        classpath = @spring_boot_utils.is?(@application) ? '-cp $PWD/.' : @droplet.additional_libraries.as_classpath
-        release_text(classpath)
+        #classpath = @spring_boot_utils.is?(@application) ? '-cp $PWD/.' : @droplet.additional_libraries.as_classpath
+        release_text #(classpath)
       end
 
       private
@@ -71,7 +94,7 @@ module JavaBuildpack
 
       private_constant :ARGUMENTS_PROPERTY, :CLASS_PATH_PROPERTY
 
-      def release_text(classpath)
+      def release_text
         [
           @droplet.java_opts.as_env_var,
           '&&',
@@ -80,8 +103,8 @@ module JavaBuildpack
           'exec',
           "#{qualify_path @droplet.java_home.root, @droplet.root}/bin/java",
           '$JAVA_OPTS',
-          classpath,
-          main_class,
+          '-jar',
+          "#{qualify_path @droplet.java_home.root, @droplet.root}/../sidecar/sidecar.jar",
           arguments
         ].flatten.compact.join(' ')
       end

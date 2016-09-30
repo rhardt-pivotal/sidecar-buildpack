@@ -21,6 +21,7 @@ require 'java_buildpack/util/java_main_utils'
 require 'java_buildpack/util/qualify_path'
 require 'java_buildpack/util/spring_boot_utils'
 require 'yaml'
+require 'json'
 
 module JavaBuildpack
   module Container
@@ -66,7 +67,9 @@ module JavaBuildpack
 
         puts pack_release.to_yaml
 
-        puts ENV.to_yaml
+        ev = JSON.pretty_generate(ENV.to_hash)
+
+        puts ev
 
 
 

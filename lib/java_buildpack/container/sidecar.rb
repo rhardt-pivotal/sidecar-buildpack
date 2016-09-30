@@ -53,13 +53,20 @@ module JavaBuildpack
 
       SIDECAR_RELEASE = "sidecar_release.out"
       LAST_PACK_RELEASE = "last_pack_release.out"
+      FINAL_RELEASE = "final_release.out"
 
       def post_compile
 
         app_dir = @application.root
 
-        sidecar_command = "#!/usr/bin/env bash\n\n"+YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))['default_process_types']['web']
-        pack_command = "#!/usr/bin/env bash\n\n"+YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))['default_process_types']['web']
+        sidecar_release = YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))
+        pack_release = YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))
+
+        sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
+        pack_command = "#!/usr/bin/env bash\n\n"+pack_release['default_process_types']['web']
+
+        pack_release['default_process_types']['web']=File.join(app_dir, "run_all.sh")
+        File.open(File.join(app_dir, "final_release.out"), 'w') {|f| f.write pack_release.to_yaml }
 
         File.open(File.join(app_dir, "run_sidecar.sh"), 'w') { |file| file.write(sidecar_command)}
         File.open(File.join(app_dir, "run_pack.sh"), 'w') { |file| file.write(pack_command)}

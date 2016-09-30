@@ -57,6 +57,8 @@ module JavaBuildpack
 
       def post_compile
 
+
+        puts("SIDECAR POST COMPILE")
         app_dir = @application.root
 
         sidecar_release = YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))
@@ -65,7 +67,7 @@ module JavaBuildpack
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
         pack_command = "#!/usr/bin/env bash\n\n"+pack_release['default_process_types']['web']
 
-        pack_release['default_process_types']['web']=File.join(app_dir, "run_all.sh")
+        pack_release['default_process_types']['web']="./run_all.sh"
         File.open(File.join(app_dir, "final_release.out"), 'w') {|f| f.write pack_release.to_yaml }
 
         File.open(File.join(app_dir, "run_sidecar.sh"), 'w') { |file| file.write(sidecar_command)}

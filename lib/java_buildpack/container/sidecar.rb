@@ -64,6 +64,8 @@ module JavaBuildpack
         sidecar_release = YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))
         pack_release = YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))
 
+        puts pack_release.to_yaml
+
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
         pack_command = "#!/usr/bin/env bash\n\n"+pack_release['default_process_types']['web']
 

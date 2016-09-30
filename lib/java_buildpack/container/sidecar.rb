@@ -66,6 +66,11 @@ module JavaBuildpack
 
         puts pack_release.to_yaml
 
+        puts ENV.to_yaml
+
+
+
+
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
         pack_command = "#!/usr/bin/env bash\n\n"+pack_release['default_process_types']['web']
 

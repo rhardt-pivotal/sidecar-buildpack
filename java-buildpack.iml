@@ -117,7 +117,7 @@
       <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="$MODULE_DIR$/../build_dir" />
       <method />
     </configuration>
-    <configuration default="false" name="compile" type="RubyRunConfigurationType" factoryName="Ruby">
+    <configuration default="false" name="sidecar_compile" type="RubyRunConfigurationType" factoryName="Ruby">
       <module name="java-buildpack" />
       <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
       <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
@@ -134,8 +134,29 @@
           <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
         </COVERAGE_PATTERN>
       </EXTENSION>
-      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/compile" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/sidecar_compile" />
       <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="$MODULE_DIR$/../build_dir $MODULE_DIR$/../cache" />
+      <method />
+    </configuration>
+    <configuration default="false" name="sidecar_release" type="RubyRunConfigurationType" factoryName="Ruby">
+      <module name="java-buildpack" />
+      <RUBY_RUN_CONFIG NAME="RUBY_ARGS" VALUE="-e $stdout.sync=true;$stderr.sync=true;load($0=ARGV.shift)" />
+      <RUBY_RUN_CONFIG NAME="WORK DIR" VALUE="$MODULE_DIR$" />
+      <RUBY_RUN_CONFIG NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RUBY_RUN_CONFIG NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RUBY_RUN_CONFIG NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="MEMORY_LIMIT" value="512M" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RUBY_RUN_CONFIG NAME="SCRIPT_PATH" VALUE="$MODULE_DIR$/bin/sidecar_release" />
+      <RUBY_RUN_CONFIG NAME="SCRIPT_ARGS" VALUE="$MODULE_DIR$/../build_dir" />
       <method />
     </configuration>
     <configuration default="false" name="Run spec 'postgresql_jdbc_spec': java-buildpack" type="RSpecRunConfigurationType" factoryName="RSpec" temporary="true">
@@ -323,11 +344,11 @@
       <sourceFolder url="file://$MODULE_DIR$/bin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../java-buildpack/.yardoc" />
+      <excludeFolder url="file://$MODULE_DIR$/../java-buildpack/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../java-buildpack/coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/../java-buildpack/doc" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
-      <excludeFolder url="file://$MODULE_DIR$/.yardoc" />
-      <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/coverage" />
-      <excludeFolder url="file://$MODULE_DIR$/doc" />
     </content>
     <orderEntry type="jdk" jdkName="ruby-2.2.5-p319" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -363,7 +384,7 @@
     <orderEntry type="library" scope="PROVIDED" name="yard (v0.9.5, ruby-2.2.5-p319) [gem]" level="application" />
   </component>
   <component name="RModuleSettingsStorage">
-    <LOAD_PATH number="4" string0="$MODULE_DIR$/lib" string1="$MODULE_DIR$/spec" string2="$MODULE_DIR$/bin" string3="$MODULE_DIR$/spec/bin" />
+    <LOAD_PATH number="4" string0="$MODULE_DIR$/../java-buildpack/lib" string1="$MODULE_DIR$/../java-buildpack/spec" string2="$MODULE_DIR$/../java-buildpack/bin" string3="$MODULE_DIR$/../java-buildpack/spec/bin" />
     <I18N_FOLDERS number="0" />
   </component>
 </module>

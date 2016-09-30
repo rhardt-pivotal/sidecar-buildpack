@@ -10,10 +10,10 @@ while [[ ( -d /proc/$PID1 ) && ( -z `grep zombie /proc/$PID1/status` ) && ( -d /
 done
 
 echo 'Something Died.  Exiting'
-if [[ ( -d /proc/$PID1 )] ]]; then
+if [[ ( -d /proc/$PID1 ) ]]; then
 kill -9 $PID1
 fi
-if [[ ( -d /proc/$PID2 )] ]]; then
+if [[ ( -d /proc/$PID2 ) ]]; then
 kill -9 $PID2
 fi
 

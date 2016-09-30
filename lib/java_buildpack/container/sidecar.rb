@@ -67,7 +67,7 @@ module JavaBuildpack
 
         puts pack_release.to_yaml
 
-        ev = JSON.pretty_generate(ENV.to_hash)
+        puts Dir.entries(app_dir)
 
         puts ev
 

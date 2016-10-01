@@ -65,17 +65,19 @@ module JavaBuildpack
         sidecar_release = YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))
         pack_release = YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))
 
-        puts pack_release.to_yaml
+        procfile = File.join(app_dir, 'Procfile')
+        proc_contents = procfile.exists? ? YAML.load_file(procfile) : nil
 
-        puts Dir.entries(app_dir)
+        final_command = proc_contents? ? proc_contents['web'] : pack_release['default_process_types']['web']
 
-        puts ev
+        puts "FINAL COMMAND: #{final_command}"
 
+        #puts Dir.entries(app_dir)
 
-
+        #puts ev
 
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
-        pack_command = "#!/usr/bin/env bash\n\n"+pack_release['default_process_types']['web']
+        pack_command = "#!/usr/bin/env bash\n\n"+final_command
 
         pack_release['default_process_types']['web']="./run_all.sh"
         File.open(File.join(app_dir, "final_release.out"), 'w') {|f| f.write pack_release.to_yaml }

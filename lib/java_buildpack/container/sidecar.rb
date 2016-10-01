@@ -65,7 +65,7 @@ module JavaBuildpack
         sidecar_release = YAML.load_file(File.join(app_dir, SIDECAR_RELEASE))
         pack_release = YAML.load_file(File.join(app_dir, LAST_PACK_RELEASE))
 
-        procfile = File.join(app_dir, 'Procfile')
+        procfile = Pathname.new(File.join(app_dir, 'Procfile'))
         proc_contents = procfile.exist? ? YAML.load_file(procfile) : nil
 
         final_command = proc_contents? ? proc_contents['web'] : pack_release['default_process_types']['web']

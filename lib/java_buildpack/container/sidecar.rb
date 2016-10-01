@@ -68,6 +68,9 @@ module JavaBuildpack
         procfile = Pathname.new(File.join(app_dir, 'Procfile'))
         proc_contents = procfile.exist? ? YAML.load_file(procfile) : nil
 
+        puts("procfile: #{procfile}")
+        puts("proc_contents: #{proc_contents}")
+
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
 
         puts "FINAL COMMAND: #{final_command}"

@@ -72,6 +72,10 @@ module JavaBuildpack
         puts("proc_contents: #{proc_contents}")
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
 
+        if procfile.exist?
+          File.open(procfile, 'w') {|file| file.write('web: ./run_all.sh')}
+        end
+
         puts "FINAL COMMAND: #{final_command}"
 
         #puts Dir.entries(app_dir)

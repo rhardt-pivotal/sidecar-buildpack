@@ -73,6 +73,7 @@ module JavaBuildpack
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
 
         if procfile.exist?
+          puts ('PROCFILE EXISTED - overwriting')
           File.open(procfile, 'w') {|file| file.write('web: ./run_all.sh')}
         end
 

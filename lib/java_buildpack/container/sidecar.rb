@@ -88,12 +88,12 @@ module JavaBuildpack
 
         puts ("sidecar_command: #{sidecar_command}, pack_command: #{pack_command}")
 
-        #((pack_release['default_process_types'] ||= {})['web'] ||= {})
-        #pack_release['default_process_types']['web'] = "./run_all.sh"
+        ((pack_release['default_process_types'] ||= {})['web'] ||= {})
+        pack_release['default_process_types']['web'] = "./run_all.sh"
 
-        #puts ("pack_release: #{pack_release}")
+        puts ("pack_release: #{pack_release}")
 
-        #File.open(File.join(app_dir, "final_release.out"), 'w') {|f| f.write pack_release.to_yaml }
+        File.open(File.join(app_dir, "final_release.out"), 'w') {|f| f.write pack_release.to_yaml }
 
         File.open(File.join(app_dir, "run_sidecar.sh"), 'w') { |file| file.write(sidecar_command)}
         File.open(File.join(app_dir, "run_pack.sh"), 'w') { |file| file.write(pack_command)}

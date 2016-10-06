@@ -23,7 +23,7 @@ $ cf push -b https://github.com/rhardt-pivotal/sidecar-buildpack
 ```
 
 ## Sample Apps
-The following consist of a suite of apps that will register with a eureka instance via a sidecar and can then reference
+The following make up a suite of apps that will register with a eureka instance via a sidecar and can then reference
 one another.  They each expose the self-explanatory endpoints `/javafortune`
 (the original Spring Boot Fortune Teller service), `/rubyfortune`, `/nodefortune`, `/pythonfortune`,
 and `/gofortune`

@@ -11,11 +11,11 @@ for service discovery and proxying respectively - regardless of whether or not i
 ## Usage
 * Start with an existing `Cloud Foundry` application
 * add a `.sidecar_buildpacks` file to the root of the application containing a link to your application's current buildpack (git repo or .tgz) _e.g._ https://github.com/cloudfoundry/nodejs-buildpack.git
-* _(Optional)_ implement a '/health' endpoint (customizable) that returns the following:
+* _(Optional)_ implement a '/health' endpoint that returns the following:
 ** the `content-type` header: `Content-Type: application/json`
 ** body: `{"status": "UP"}`
 ** Eureka will show your app as 'Down' unless you properly implement the `/health` endpoint
-* if your application uses the https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html#start-commands[Command Attribute] in its `manifest.yml,' move the command into a https://docs.cloudfoundry.org/buildpacks/prod-server.html#procfile[Procfile]
+* if your application uses the https://docs.cloudfoundry.org/devguide/deploy-apps/manifest.html#start-commands[Command Attribute] in its `manifest.yml`, move the command into a https://docs.cloudfoundry.org/buildpacks/prod-server.html#procfile[Procfile]
 * Deploy with:
 +
 ```bash

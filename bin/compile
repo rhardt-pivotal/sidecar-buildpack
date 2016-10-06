@@ -61,7 +61,7 @@ for BUILDPACK in $(cat $1/.sidecar_buildpacks); do
 	    echo "response code was $?"
         exit 1
       fi
-      echo "after ruby compile"
+      echo "after child buildpack compile"
       # check if the buildpack left behind an environment for subsequent ones
       if [ -e $dir/export ]; then
         source $dir/export

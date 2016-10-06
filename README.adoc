@@ -37,7 +37,7 @@ and `/gofortune`
 
 
 ## Bundled Sidecar
-The actual sidecar functionality resides in a Spring Boot jar the link:resources/sidecar[Resources directory].
+The actual sidecar functionality resides in a Spring Boot jar in the link:resources/sidecar[Resources directory].
 The repo for that jar is https://github.com/rhardt-pivotal/sidecar-jar[here]
 
 ## Acknowledgements

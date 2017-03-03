@@ -73,8 +73,9 @@ module JavaBuildpack
         puts("procfile: #{procfile}")
         puts("proc_contents: #{proc_contents}")
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
-        pack_dead_file = File.join(app_dir, PACK_DEAD_MARKER)
-        final_command += " & touch #{pack_dead_file}"
+        final_command = "DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n\n" + final_command
+        final_command += " & touch $DIR/#{PACK_DEAD_MARKER}"
+
 
         if procfile.exist?
           puts ('PROCFILE EXISTED - overwriting')
@@ -87,9 +88,9 @@ module JavaBuildpack
 
         #puts ev
 
-        sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
-        sidecar_dead_file = File.join(app_dir, SIDECAR_DEAD_MARKER)
-        sidecar_command += " & touch #{sidecar_dead_file}"
+        sidecar_command = "#!/usr/bin/env bash\n\n  "+sidecar_release['default_process_types']['web']
+        sidecar_command = "DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n\n" + sidecar_command
+        sidecar_command += " & touch $DIR/#{SIDECAR_DEAD_MARKER}"
 
         pack_command = "#!/usr/bin/env bash\n\n"+final_command
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-trap 'kill $(jobs -p)' EXIT
+trap 'trap - SIGTERM && kill 0' SIGINT SIGTERM EXIT
 
 $PWD/run_pack.sh &
 PID1=$!
-print "PID1: $PID1"
+echo "PID1: $PID1"
 echo "ran pack: "
 $PWD/run_sidecar.sh &
 PID2=$!
-print "PID2: $PID2"
+echo "PID2: $PID2"
 
 
 while [[ ( -d /proc/$PID1 ) && ( -z `grep zombie /proc/$PID1/status` ) && ( -d /proc/$PID2 ) && ( -z `grep zombie /proc/$PID2/status` ) && ( ! -f $PWD/pack_dead ) && ( ! -f $PWD/sidecar_dead ) ]]; do

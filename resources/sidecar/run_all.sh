@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#http://stackoverflow.com/questions/360201/how-do-i-kill-background-processes-jobs-when-my-shell-script-exits/28333938#28333938
 trap 'trap - SIGTERM && kill 0' SIGINT SIGTERM EXIT
 
 $PWD/run_pack.sh &

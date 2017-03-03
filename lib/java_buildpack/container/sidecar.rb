@@ -73,8 +73,8 @@ module JavaBuildpack
         puts("procfile: #{procfile}")
         puts("proc_contents: #{proc_contents}")
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
-        final_command = "DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n\n" + final_command
-        final_command += " & touch $DIR/#{PACK_DEAD_MARKER}"
+        #final_command = "DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n\n" + final_command
+        #final_command += " & touch $DIR/#{PACK_DEAD_MARKER}"
 
 
         if procfile.exist?
@@ -84,14 +84,15 @@ module JavaBuildpack
 
         puts "FINAL COMMAND: #{final_command}"
 
+        pack_command = "#!/usr/bin/env bash\n\n"+final_command
         #puts Dir.entries(app_dir)
 
         #puts ev
 
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
-        sidecar_command += " & touch $( dirname \"${BASH_SOURCE[0]}\" )/#{SIDECAR_DEAD_MARKER}"
+        #sidecar_command += " & touch $( dirname \"${BASH_SOURCE[0]}\" )/#{SIDECAR_DEAD_MARKER}"
 
-        pack_command = "#!/usr/bin/env bash\n\n"+final_command
+
 
         puts ("sidecar_command: #{sidecar_command}, pack_command: #{pack_command}")
 

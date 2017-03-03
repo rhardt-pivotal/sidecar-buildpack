@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 $PWD/run_pack.sh &
 PID1=$!
 $PWD/run_sidecar.sh &

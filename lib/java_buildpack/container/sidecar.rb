@@ -55,6 +55,8 @@ module JavaBuildpack
       SIDECAR_RELEASE = "sidecar_release.out"
       LAST_PACK_RELEASE = "last_pack_release.out"
       FINAL_RELEASE = "final_release.out"
+      PACK_DEAD_MARKER = "pack_dead"
+      SIDECAR_DEAD_MARKER = "sidecar_dead"
 
       def post_compile
 
@@ -71,6 +73,8 @@ module JavaBuildpack
         puts("procfile: #{procfile}")
         puts("proc_contents: #{proc_contents}")
         final_command = proc_contents.nil? ? pack_release['default_process_types']['web'] : proc_contents['web']
+        pack_dead_file = File.join(app_dir, PACK_DEAD_MARKER)
+        final_command += " & touch #{pack_dead_file}"
 
         if procfile.exist?
           puts ('PROCFILE EXISTED - overwriting')
@@ -84,6 +88,9 @@ module JavaBuildpack
         #puts ev
 
         sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
+        sidecar_dead_file = File.join(app_dir, SIDECAR_DEAD_MARKER)
+        sidecar_command += " & touch #{sidecar_dead_file}"
+
         pack_command = "#!/usr/bin/env bash\n\n"+final_command
 
         puts ("sidecar_command: #{sidecar_command}, pack_command: #{pack_command}")

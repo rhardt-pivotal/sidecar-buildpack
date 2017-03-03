@@ -88,9 +88,8 @@ module JavaBuildpack
 
         #puts ev
 
-        sidecar_command = "#!/usr/bin/env bash\n\n  "+sidecar_release['default_process_types']['web']
-        sidecar_command = "DIR=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"\n\n" + sidecar_command
-        sidecar_command += " & touch $DIR/#{SIDECAR_DEAD_MARKER}"
+        sidecar_command = "#!/usr/bin/env bash\n\n"+sidecar_release['default_process_types']['web']
+        sidecar_command += " & touch $( dirname \"${BASH_SOURCE[0]}\" )/#{SIDECAR_DEAD_MARKER}"
 
         pack_command = "#!/usr/bin/env bash\n\n"+final_command
 

@@ -18,6 +18,8 @@ $stdout.sync = true
 $stderr.sync = true
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
+puts('STARTING EXPORT_SIDECAR_CONFIG')
+
 require 'net/http'
 require 'json'
 
@@ -27,17 +29,20 @@ retries = 36
 response = nil
 url = "http://127.0.0.1:#{port}/sidecar"
 uri = URI(url)
-
+puts("CALLING: #{url}")
 begin
   response = Net::HTTP.get(uri)
+  puts("GOT RESPONSE: #{response}")
 rescue Exception
+  print("EXCEPTION: #{$!}")
   sleep 5
   retry if (retries -= 1) > 0
 end
 
-def envify(s)
-  return s.upcase.gsub(".", "_").gsub("-", "_")
+puts("RESPONSE: #{response}")
 
+def envify(s)
+  return s.upcase.gsub(".", "_").gsub("-", "_").gsub("[", "_").gsub("]", "")
 end
 
 if response

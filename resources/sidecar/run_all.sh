@@ -8,7 +8,7 @@ PID2=$!
 echo "PID2: $PID2"
 
 
-$PWD/export_sidecar_config.rb || {echo 'failed to export sidecar config' ; exit 211}
+$PWD/export_sidecar_config.rb || { echo 'failed to export sidecar config' ; exit 21; }
 . $PWD/sidecar_export.sh
 
 

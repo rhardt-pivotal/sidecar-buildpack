@@ -111,6 +111,10 @@ module JavaBuildpack
         @droplet.copy_resource(file_name="run_all.sh", target_directory=app_dir)
         File.chmod(0755, File.join(app_dir, "run_all.sh"))
 
+        @droplet.copy_resource(file_name="export_sidecar_config.rb", target_directory=app_dir)
+        File.chmod(0755, File.join(app_dir, "export_sidecar_config.rb"))
+
+
 
       end
 

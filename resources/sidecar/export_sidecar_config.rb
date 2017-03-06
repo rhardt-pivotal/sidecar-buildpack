@@ -51,7 +51,7 @@ if response
     |f|
     #f.puts("#!/usr/bin/env bash\n")
     resp_obj.each{ |k,v|
-      if k =~ /^[A-Za-z0-9\.\_\-]*$/
+      if k =~ /^[A-Za-z0-9\.\_\-\[\]]*$/
         f.puts("export #{envify(k)}=\"#{v}\"\n")
       else
         puts("invalid key: #{k}")

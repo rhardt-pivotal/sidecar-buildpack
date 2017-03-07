@@ -32,14 +32,14 @@ uri = URI(url)
 puts("CALLING: #{url}")
 begin
   response = Net::HTTP.get(uri)
-  puts("GOT RESPONSE: #{response}")
+  #puts("GOT RESPONSE: #{response}")
 rescue Exception
   print("EXCEPTION: #{$!}")
   sleep 5
   retry if (retries -= 1) > 0
 end
 
-puts("RESPONSE: #{response}")
+#puts("RESPONSE: #{response}")
 
 def envify(s)
   return s.upcase.gsub(".", "_").gsub("-", "_").gsub("[", "_").gsub("]", "")
